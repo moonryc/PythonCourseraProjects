@@ -1,4 +1,4 @@
-# Homework 3 for Principles of Computing class, by k., 07/06/2014
+
 
 import math
 import itertools
