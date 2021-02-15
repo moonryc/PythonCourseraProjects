@@ -1,15 +1,13 @@
 """
 Student code for Word Wrangler game
 """
-
+# only runs on codeskulptor.org
 import urllib2
-import simpleguitk as simplegui
+import codeskulptor
 import poc_wrangler_provided as provided
 import math
 
-#WORDFILE = "assets_scrabble_words3.txt"
-WORDFILE = 'http://codeskulptor-assets.commondatastorage.googleapis.com/assets_scrabble_words3.txt'
-
+WORDFILE = "assets_scrabble_words3.txt"
 
 # Functions to manipulate ordered word lists
 
@@ -65,25 +63,25 @@ def merge(list1, list2):
     This function can be iterative.
     """
     ans = list(list1)+list(list2)
-    i=0
-    j=0
-    k=0
-    while i < len(list1) and j < len(list2):
-        if list1[i] < list2[j]:
-            ans[k] = list1[i]
-            i+=1
+    left_increment=0
+    right_increment=0
+    ans_increment=0
+    while left_increment < len(list1) and right_increment < len(list2):
+        if list1[left_increment] < list2[right_increment]:
+            ans[ans_increment] = list1[left_increment]
+            left_increment+=1
         else:
-            ans[k] = list2[j]
-            j+=1
-        k+=1
-    while i < len(list1):
-        ans[k] = list1[i]
-        i+=1
-        k+=1
-    while j < len(list2):
-        ans[k] = list2[j]
-        j+=1
-        k+=1
+            ans[ans_increment] = list2[right_increment]
+            right_increment+=1
+        ans_increment+=1
+    while left_increment < len(list1):
+        ans[ans_increment] = list1[left_increment]
+        left_increment+=1
+        ans_increment+=1
+    while right_increment < len(list2):
+        ans[ans_increment] = list2[right_increment]
+        right_increment+=1
+        ans_increment+=1
     return ans
                 
 def merge_sort(list1):
@@ -111,12 +109,17 @@ def gen_all_strings(word):
 
     This function should be recursive.
     """
-    ans=[]
-    blank = [()]
-    for index in range(len(list(word))):
-        for x in x:
-            ans = blank +[]
-    return []
+    if len(word) == 0:
+        return [""]
+    first = word[0]
+    rest = word[1:]
+    rest_strings = gen_all_strings(rest)
+    answer = []
+    print rest_strings
+    for item in rest_strings:
+        for ind in range(len(item) + 1):
+            answer.append(item[:ind] + first + item[ind:])
+    return rest_strings + answer
 
 # Function to load words from a file
 
@@ -126,7 +129,11 @@ def load_words(filename):
 
     Returns a list of strings.
     """
-    return []
+    url = codeskulptor.file2url(filename)
+    word_dictionary = urllib2.urlopen(url)
+    words= []
+    #[words.append(line[:-1]) for line in word_dictionary.readlines()]
+    return words 
 
 def run():
     """
@@ -139,8 +146,6 @@ def run():
     provided.run_game(wrangler)
 
 # Uncomment when you are ready to try the game
-# run()
-
+#run()
     
-#make sure it is alphabetical order
-#add all strings that include first at any position in the generated strings
+    

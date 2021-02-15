@@ -36,14 +36,18 @@ class WordWranglerGUI:
         Create frame and timers, register event handlers
         """
         self.game = game
-        self.frame = simplegui.create_frame("Word Wrangler", CANVAS_WIDTH, CANVAS_HEIGHT, 250)
+        self.frame = simplegui.create_frame("Word Wrangler", 
+                                            CANVAS_WIDTH, CANVAS_HEIGHT, 250)
         self.frame.set_canvas_background("Blue")        
-        self.enter_input = self.frame.add_input("Enter word for new game", self.enter_start_word, 250)
+               
+        self.enter_input = self.frame.add_input("Enter word for new game", 
+                                                self.enter_start_word, 250)
         labelmsg = "Stars correspond to hidden words formed using letters "
         labelmsg += "from the entered word. Hidden words are listed in alphabetical order"
         self.frame.add_label(labelmsg, 250)
         self.frame.add_label("", 250)
-        self.guess_label = self.frame.add_input("Enter a word", self.enter_guess, 250)       
+        self.guess_label = self.frame.add_input("Enter a word", 
+                                                self.enter_guess, 250)       
         self.frame.add_label("For a hint, click on a starred word", 250)
         self.frame.set_mouseclick_handler(self.peek)
         self.frame.set_draw_handler(self.draw)
