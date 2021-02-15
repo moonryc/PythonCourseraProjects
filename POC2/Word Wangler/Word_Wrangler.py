@@ -20,10 +20,16 @@ def remove_duplicates(list1):
     with no duplicates.
     This function can be iterative.
     """
-
-    #first is a test to get it working in the most simple fashion
-
-    return set(list1)
+    location = len(list1)-1
+    ans = list(list1)
+    if location == 0:
+        return ans
+    else:
+        if ans[location] == ans[location - 1]:
+            ans.pop(location)
+            return remove_duplicates(ans)
+        else:
+            return remove_duplicates(ans[:location])+ans[location:]
 
 def intersect(list1, list2):
     """
@@ -32,10 +38,22 @@ def intersect(list1, list2):
     both list1 and list2.
     This function can be iterative.
     """
-
-
-
-    return []
+    my_list=[]
+    if list1 == [] and list2 ==[]:
+        return my_list
+    elif list1 !=[] and list2 == []:
+        return my_list
+    elif list1 ==[] and list2 != []:
+        return my_list
+    if list1 != [] and list2 != []:
+        if list1[0] > list2[0]:
+            return intersect(list1,list2[1:])
+        elif list1[0] < list2[0]:
+            return intersect(list1[1:],list2)    
+        elif list1[0] == list2[0]:
+            my_list.append(list1[0]) 
+            my_list+= intersect(list1[1:],list2[1:])
+    return my_list
 
 # Functions to perform merge sort
 
