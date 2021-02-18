@@ -3,7 +3,7 @@ Student code for Word Wrangler game
 """
 # only runs on codeskulptor.org
 import urllib2
-import codeskulptor
+#import codeskulptor
 import poc_wrangler_provided as provided
 import math
 
