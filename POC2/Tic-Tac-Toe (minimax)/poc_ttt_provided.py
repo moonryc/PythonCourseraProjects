@@ -30,6 +30,7 @@ class TTTBoard:
             # Create empty board
             self._board = [[EMPTY for dummycol in range(dim)] 
                            for dummyrow in range(dim)]
+            #self._board = [[PLAYERO,PLAYERX,EMPTY],[PLAYERO,PLAYERX,EMPTY],[EMPTY,PLAYERO,PLAYERX]]
         else:
             # Copy board grid
             self._board = [[board[row][col] for col in range(dim)] 

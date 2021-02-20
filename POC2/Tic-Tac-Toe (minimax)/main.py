@@ -4,6 +4,7 @@ Mini-max Tic-Tac-Toe Player
 
 import poc_ttt_gui
 import poc_ttt_provided as provided
+import random
 
 # Set timeout, as mini-max can take a long time
 #import codeskulptor
@@ -22,7 +23,30 @@ def mm_move(board, player):
     of the given board and the second element is the desired move as a
     tuple, (row, col).
     """
-    return 0, (-1, -1)
+
+    #base case/ if the game is running
+    if board.check_win() == None:
+        score_move=[]
+        for empty_cells in board.get_empty_squares():
+            clone_board = board.clone()
+            clone_board.move(empty_cells[0],empty_cells[1], player)
+            score = mm_move(clone_board,provided.switch_player(player))[0]
+
+            if score == 1 and player == provided.PLAYERX:
+                return (1, empty_cells)
+            elif score == -1 and player == provided.PLAYERO:
+                return (-1, empty_cells)
+
+            score_move.append((score, empty_cells))
+        player_x_move = max(score_move)
+        player_o_move = min(score_move)
+
+        if player == provided.PLAYERO:
+            return player_o_move
+        else:
+            return player_x_move
+    else:
+        return SCORES[board.check_win()], (-1, -1)
 
 def move_wrapper(board, player, trials):
     """
@@ -39,4 +63,4 @@ def move_wrapper(board, player, trials):
 # testing to save time.
 
 #provided.play_game(move_wrapper, 1, False)        
-#poc_ttt_gui.run_gui(3, provided.PLAYERO, move_wrapper, 1, False)
+poc_ttt_gui.run_gui(3, provided.PLAYERO, move_wrapper, 1, False)

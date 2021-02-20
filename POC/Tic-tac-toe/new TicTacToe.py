@@ -72,6 +72,7 @@ def mc_move(board,player,trials):
         cloned_board = board.clone() # New board based on the given board
         mc_trial(cloned_board,player)
         mc_update_scores(empty_scores, cloned_board,player)
+    print board
     
         
     return get_best_move(board, empty_scores)
