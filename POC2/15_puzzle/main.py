@@ -180,40 +180,41 @@ class Puzzle:
             vert_return += 'ld'
         final_move = vert_move + horiz_move + horiz_shift + vert_return      
         return final_move
-        """
-            #finds the distance from where the target is to where the target belongs
-            distance_to_target = (target_pos[0]-target_row, target_pos[1]-target_col)
-            delta_x = distance_to_target[1]
-            delta_y = distance_to_target[0]
-            vert_return = ''
-            print 'target pos', target_pos
-            print 'target_row, target_col: ', target_row,',',target_col
-            print 'distance_to_target: ', distance_to_target
-            shift_x = abs(delta_x) -1
-            shift_y = abs(delta_y) -1
-
-            vert_move = abs(delta_y) * 'u'
-            if delta_y < 0:
-               vert_return = (shift_y * 'lddru') + 'ld'
-
-            # if target is left of 0
-            if delta_x < 0:
-                hori_move = abs(delta_x) * 'l'
-
-                hori_shift = (shift_x+1) * 'urrdl'
-
-
-            #if target is right of 0
-            else:
-                hori_move = delta_x * 'r'
-
-
-
-            final_move = hori_move + vert_move + vert_return + hori_shift
-            print final_move
-
-            return final_move
-        """
+#I intend to come back and make this better
+#        """
+#            #finds the distance from where the target is to where the target belongs
+#            distance_to_target = (target_pos[0]-target_row, target_pos[1]-target_col)
+#            delta_x = distance_to_target[1]
+#            delta_y = distance_to_target[0]
+#            vert_return = ''
+#            print 'target pos', target_pos
+#            print 'target_row, target_col: ', target_row,',',target_col
+#            print 'distance_to_target: ', distance_to_target
+#            shift_x = abs(delta_x) -1
+#            shift_y = abs(delta_y) -1
+#
+#            vert_move = abs(delta_y) * 'u'
+#            if delta_y < 0:
+#               vert_return = (shift_y * 'lddru') + 'ld'
+#
+#            # if target is left of 0
+#            if delta_x < 0:
+#                hori_move = abs(delta_x) * 'l'
+#
+#                hori_shift = (shift_x+1) * 'urrdl'
+#
+#
+#            #if target is right of 0
+#            else:
+#                hori_move = delta_x * 'r'
+#
+#
+#
+#            final_move = hori_move + vert_move + vert_return + hori_shift
+#            print final_move
+#
+#            return final_move
+#        """
 
     ##################################################################
     # invarient methods
@@ -368,15 +369,24 @@ class Puzzle:
         Solve the tile in row zero at the specified column
         Updates puzzle and returns a move string
         """
-        target_pos = self.current_position(1,target_col)
-        solution_string = ''
-        assert self.row0_invariant(target_col), 'ERROR: row0_invarient(target_col)'        
-        solution_string = self.fetch_tile(0,target_col,target_pos) #+(self.get_width()-2) * 'r'
-
-        print solution_string
-        self.update_puzzle(solution_string)
-        #assert self.row1_invariant(target_col-1), 'ERROR: row1_invarient(target_col-1)'
-        return solution_string
+        print 'need to redo this method myself'
+        assert self.row0_invariant(target_col)
+        target_pos = self.current_position(0, target_col)
+        initial_move = 'ld'
+        distance_to_target = (target_pos[0], target_pos[1] - target_col)
+        if distance_to_target == (0, -1):
+            tile_fetcher = ''
+            homework_2by3_shifter = ''
+        elif distance_to_target == (1, -1):
+            tile_fetcher = 'uld'
+            homework_2by3_shifter = 'urdlurrdluldrruld'
+        else:
+            tile_fetcher = self.fetch_tile(1, target_col - 1, target_pos)
+            homework_2by3_shifter = 'urdlurrdluldrruld'
+        final_move = initial_move + tile_fetcher + homework_2by3_shifter
+        self.update_puzzle(final_move)
+        assert self.row1_invariant(target_col - 1)
+        return final_move
 
     def solve_row1_tile(self, target_col):
         """
@@ -385,7 +395,7 @@ class Puzzle:
         """
         target_pos = self.current_position(1,target_col)
         assert self.row1_invariant(target_col), 'ERROR: row0_invarient(target_col)'        
-        solution_string = self.fetch_tile(1,target_col,target_pos) 
+        solution_string = self.fetch_tile(1,target_col,target_pos) + 'ur'
         self.update_puzzle(solution_string)
         return solution_string
 
@@ -404,7 +414,7 @@ class Puzzle:
         elif self.get_number(0,1) == 1:
            solution_string ='lu'
         else:
-            solution_string = 'uldru'
+            solution_string = 'lurdlu'
 
         self.update_puzzle(solution_string)
         return solution_string
@@ -422,8 +432,7 @@ class Puzzle:
         for col in range(self.get_width() - 1, 1, -1):
             solution_string += self.solve_row1_tile(col)
             solution_string += self.solve_row0_tile(col)
-            print col
- #       #solution_string += self.solve_2x2()
+        solution_string += self.solve_2x2()
         print solution_string
         return solution_string
 
@@ -433,11 +442,11 @@ class Puzzle:
 #obj = Puzzle(4,4, [[4,6,1,3],[5,2,7,0],[8,9,10,11],[12,13,14,15]])
 #obj = Puzzle(4,4, [[5,4,1,3],[8,15,2,7],[10,13,6,11],[9,12,14,0]])
 
-obj = Puzzle(4, 5, [[7, 2, 0, 3, 4], [5, 6, 1, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19]])
-obj.row0_invariant(2)
+#obj = Puzzle(4, 5, [[7, 2, 0, 3, 4], [5, 6, 1, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19]])
+#obj.row0_invariant(2)
+#obj = Puzzle(4,4)
 
-
-poc_fifteen_gui.FifteenGUI(obj)
+#poc_fifteen_gui.FifteenGUI(obj)
 
 
 
