@@ -51,14 +51,14 @@ def get_best_move(board,scores):
     empty_spot = board.get_empty_squares()
     first_spot = empty_spot[0]
     highest_score = scores[first_spot[0]][first_spot[1]]
-   
+
     best_move = first_spot
-    
+
     for square in empty_spot:
         square_score = scores[square[0]][square[1]]
-        if(square_score > highest_score):
+        if square_score > highest_score:
             highest_score = square_score
-            best_move = square    
+            best_move = square
 
     return best_move
 
@@ -72,9 +72,9 @@ def mc_move(board,player,trials):
         cloned_board = board.clone() # New board based on the given board
         mc_trial(cloned_board,player)
         mc_update_scores(empty_scores, cloned_board,player)
-    print board
-    
-        
+    print(empty_scores)
+
+
     return get_best_move(board, empty_scores)
 
 

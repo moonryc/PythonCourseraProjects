@@ -70,7 +70,7 @@ def expected_value(held_dice, num_die_sides, num_free_dice):
     scores = []
     for item in possible_seq:
         scores.append(score(held_dice + item))
-    
+    print(scores)
     return float(sum(scores)) / float(len(scores))
 
 
@@ -116,14 +116,15 @@ def strategy(hand, num_die_sides):
 
 
 def run_example():
-   """
-   Compute the dice to hold and expected score for an example hand
-   """
-   num_die_sides = 6
-   hand = (1,1,1,5,6)
-   sorted(hand)
-   hand_score, hold = strategy(hand, num_die_sides)
-   print("Best strategy for hand", hand, "is to hold", hold, "with expected score", hand_score)
+    """
+    Compute the dice to hold and expected score for an example hand
+    """
+    num_die_sides = 6
+    hand = (1, 2)
+    #hand = (1, 1, 1, 5, 6)
+    sorted(hand)
+    hand_score, hold = strategy(hand, num_die_sides)
+    print("Best strategy for hand", hand, "is to hold", hold, "with expected score", hand_score)
 
 
 
