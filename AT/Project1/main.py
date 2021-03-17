@@ -12,8 +12,8 @@ def make_complete_graph(num_nodes):
     """
     Takes the number of nodes num_nodes and returns a dictionary corresponding
     to a complete directed graph with the specified number of nodes. A complete graph
-    contains all possible edges subject to the restriction that self-loops are not allowed. 
-    The nodes of the graph should be numbered 0 to num_nodes - 1 when num_nodes is positive. 
+    contains all possible edges subject to the restriction that self-loops are not allowed.
+    The nodes of the graph should be numbered 0 to num_nodes - 1 when num_nodes is positive.
     Otherwise, the function returns a dictionary corresponding to the empty graph.
 
     Args:
@@ -33,13 +33,12 @@ def make_complete_graph(num_nodes):
                 temp_list.append(index)
             temp_list.remove(node)
             my_graph[node] = set(temp_list)
-                
     return my_graph
 
 def compute_in_degrees(digraph):
     """Takes a directed graph (represented as a dictionary) and computes the in-degrees for the
-    nodes in the graph. The function should return a dictionary with the same set of keys (nodes) as digraph
-    whose corresponding values are the number of edges whose head matches a particular node.
+    nodes in the graph. The function should return a dictionary with the same set of keys (nodes) as
+    digraph whose corresponding values are the number of edges whose head matches a particular node.
 
     Args:
         digraph (dictionary): a directed graph
@@ -70,7 +69,6 @@ def in_degree_distribution(digraph):
     Returns:
         dictionary: a dictionarys
     """
-    denominator = len(digraph)
     my_distrobution = {}
     my_in_degrees = compute_in_degrees(digraph)
     for key in my_in_degrees.values():
@@ -82,4 +80,3 @@ def in_degree_distribution(digraph):
     return my_distrobution
 
 print(in_degree_distribution(EX_GRAPH0))
-
