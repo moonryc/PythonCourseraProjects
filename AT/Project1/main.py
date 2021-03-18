@@ -4,9 +4,9 @@
 
 
 EX_GRAPH0 = {0:set([1,2]),1:set([]),2:set([])}
-EX_GRAPH1 = {0:set([1,4,5]),1:set([2,6]),2:set([3]),3:set([0]),4:set([1]),5:set([2]),6:set([])}
-EX_GRAPH2 = {0:set([1,4,5]),1:set([2,6]),2:set([3,7]),3:set([7]),4:set([1]),5:set([2]),
-            6:set([]),7:set([3]),8:set([1,2]),9:set([0,3,4,5,6,7])}
+#EX_GRAPH1 = {0:set([1,4,5]),1:set([2,6]),2:set([3]),3:set([0]),4:set([1]),5:set([2]),6:set([])}
+#EX_GRAPH2 = {0:set([1,4,5]),1:set([2,6]),2:set([3,7]),3:set([7]),4:set([1]),5:set([2]),
+#            6:set([]),7:set([3]),8:set([1,2]),9:set([0,3,4,5,6,7])}
 
 def make_complete_graph(num_nodes):
     """
@@ -46,12 +46,10 @@ def compute_in_degrees(digraph):
     Returns:
         dictionary: dictionary of keys with corresponding number of edges
     """
-    my_graph = {}
-    for key in digraph:
-        my_graph[key] = 0
-        for index in digraph:
-            if key in digraph.get(index):
-                my_graph[key] +=1
+    my_graph = dict([(key, 0) for key in digraph])
+    for targets in digraph.values():
+        for target in targets:
+            my_graph[target] += 1
     return my_graph
 
 
@@ -69,14 +67,12 @@ def in_degree_distribution(digraph):
     Returns:
         dictionary: a dictionarys
     """
-    my_distrobution = {}
     my_in_degrees = compute_in_degrees(digraph)
+    my_distrobution = dict([(key, 0) for key in my_in_degrees.values()])
     for key in my_in_degrees.values():
-        my_distrobution[key] = 0
-        for index in digraph:
-            if key == my_in_degrees[index]:
-                my_distrobution[key] +=1
+        my_distrobution[key] += 1
 
     return my_distrobution
 
+#print(compute_in_degrees(EX_GRAPH0))
 print(in_degree_distribution(EX_GRAPH0))
