@@ -1,7 +1,7 @@
 import random
-import math
-import question_1 as q1
-#import user48_LAdJVaadjQ_7 as q1
+import main
+import matplotlib.pyplot as plt
+#import user48_LAdJVaadjQ_7 as main
 #import codeskulptor
 #import simpleplot
 #codeskulptor.set_timeout(30)
@@ -19,28 +19,22 @@ for V_i in V:
                 sub_list.add(V_j)
     E.append(sub_list)
 
-def create_dic(nodes,edges):
-    my_dict={}
-    for index in nodes:
-        my_dict[index] = edges[index]
-    return my_dict
-
-er_dictionary = create_dic(V,E)
+er_dictionary = main.create_dic(V,E)
 num_nodes = len(er_dictionary)
-er_dic_in = q1.compute_in_degrees(er_dictionary)
-unnormal_er_in = q1.in_degree_distribution(er_dictionary)
-normalized_er_in = q1.normalized_in_degree_distrobution(unnormal_er_in,num_nodes)
+er_dic_in = main.compute_in_degrees(er_dictionary)
+unnormal_er_in = main.in_degree_distribution(er_dictionary)
+normalized_er_in = main.normalized_in_degree_distrobution(unnormal_er_in,num_nodes)
+GRAPH_log = main.log_normalized(normalized_er_in)
 
-def log_normalized(normalized_dict):
-    log_dict = {}
-    for key in normalized_dict.keys():
-        if key != 0:
-            log_dict[float(math.log(key))] = float(math.log(normalized_dict[key]))
-    return log_dict
+#simpleplot.plot_scatter('Normalized Distrobution', 600,600, 'log in-degree', 'log probability', [GRAPH_log])
 
-plot = log_normalized(normalized_er_in)
-print(plot)
+# Plot
 
+plt.title('Scatter plot pythonspot.com')
+for data_dict in GRAPH_log:
+    x = data_dict
+    y = GRAPH_log.get(x)
+    plt.scatter(x,y)
 
-
-#simpleplot.plot_scatter('Normalized Distrobution', 600,600, 'in degree', 'ratio of occurence', [plot])
+#plt.legend(plot.keys())
+plt.show()
