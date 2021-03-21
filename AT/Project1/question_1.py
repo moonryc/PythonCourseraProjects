@@ -16,7 +16,8 @@ GRAPH_normal_inde = main.normalized_in_degree_distrobution(GRAPH_inde_unnormal,l
 GRAPH_log = main.log_normalized(GRAPH_normal_inde)
 
 #simpleplot.plot_scatter('In-degree distrobution, Citation Graph', 600,600, 'log in-degree', 'log probability', [GRAPH_log])
-
+average_out_degree = main.compute_out_degree_average(GRAPH_papers)
+print('average out degree:', average_out_degree)
 # Plot
 
 plt.title('Scatter plot pythonspot.com')
