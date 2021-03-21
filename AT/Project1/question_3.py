@@ -88,6 +88,9 @@ unnormalized_in_degrees = main.in_degree_distribution(GRAPH)
 normalized_in_degree_distro = main.normalized_in_degree_distrobution(unnormalized_in_degrees, len(GRAPH))
 GRAPH_log = main.log_normalized(normalized_in_degree_distro)
 
+edges_sum = main.compute_in_degrees_sum(GRAPH) + main.compute_out_degree_sum(GRAPH)
+print('sum of edges:', edges_sum)
+
 #simpleplot.plot_scatter('Normalized Distrobution', 'log in-degree', 'log probability', [GRAPH_log])
 
 # Plot
