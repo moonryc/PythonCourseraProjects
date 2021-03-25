@@ -4,6 +4,8 @@ Breath first search algo for looking through a graph represented by a dictionary
 from collections import deque
 import random
 import alg_application2_provided as comnet
+import algo_er_graph as algo_er
+import algo_upa_graph as algo_upa
 
 def get_num_edges(ugraph):
     """returns the todal number of edges in the graph
@@ -86,10 +88,11 @@ def compute_resilience(ugraph, attack_order):
         attack_order (list): a list of nodes
 
     Returns:
-        list: 
+        list: a list of the size of the  largest connected componets.
+              each number from left to right corresponds to the attack order
     """
     my_graph = ugraph
-    largest_componets =[]
+    largest_componets = []
     largest_componets.append(largest_cc_size(ugraph))
     for attack in attack_order:
         node_remove = attack
@@ -102,7 +105,7 @@ def compute_resilience(ugraph, attack_order):
         largest_componets.append(largest_cc_size(my_graph))
     return largest_componets
 
-def computer_network_graph():
+def get_compnet_graph():
     """returns the computer network graph
 
     Returns:
@@ -110,29 +113,25 @@ def computer_network_graph():
     """
     return comnet.load_graph(comnet.NETWORK_URL)
 
-def undirected_er_graph(numnodes, prob):
-    """generates a undirected er graph from num nodes and probability
+def get_ea_graph(numnodes, prob):
+    """returns a graph represented by a dictionary
 
     Args:
-        numnodes (int): and integer of the number of nodes
-        prob (float): a number between 0 and 1
+        numnodes (int): number of nodes in the
 
     Returns:
-        dictionary: a dictionary reprentation of the graph
+        dictionary: a dictionary representation of a graph
     """
-    my_graph = {}
-    for node in range(numnodes):
-        my_graph[node] = set([])
-    for V_i in my_graph.keys():
-        for V_j in my_graph.keys():
-            if V_i != V_j:
-                a_variable = random.random()
-                if a_variable < prob:
-                    value_i = my_graph[V_i]
-                    value_j = my_graph[V_j]
-                    value_i.add(V_j)
-                    value_j.add(V_i)
-                    my_graph[V_i] = value_i
-                    my_graph[V_j] = value_j
-    return my_graph
+    return algo_er.undirected_er_graph(numnodes, prob)
 
+def get_upa_graph(numnodes, m):
+    """returns a upa graph represented by a dictionary of nodes
+
+    Args:
+        numnodes (int): max number of nodes to
+        m (int): initial number of nodes
+
+    Returns:
+        dictionary: dictionary representation of a graph
+    """
+    return algo_upa.undirected_pa_graph(numnodes, m)
