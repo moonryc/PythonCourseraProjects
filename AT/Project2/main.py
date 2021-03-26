@@ -113,7 +113,7 @@ def get_compnet_graph():
     """
     return comnet.load_graph(comnet.NETWORK_URL)
 
-def get_ea_graph(numnodes, prob):
+def get_er_graph(numnodes, prob):
     """returns a graph represented by a dictionary
 
     Args:
@@ -135,3 +135,61 @@ def get_upa_graph(numnodes, m):
         dictionary: dictionary representation of a graph
     """
     return algo_upa.undirected_pa_graph(numnodes, m)
+
+def random_order(ugraph):
+    """returns a shuffled list of nodes in
+
+    Args:
+        ugraph (dictionary): a dictionary representation of a graph
+
+    Returns:
+        list: a list of shufffled nodes
+    """
+    shuffled_list = ugraph.keys()
+    random.shuffle(shuffled_list)
+    return shuffled_list
+
+def res_to_graph(res):
+    """used to create a dictionary that will be graph where the keys in the
+        dictionary are the largest connected componet in the graph at that
+        point in time
+
+    Args:
+        res (list): a list of the largest connected componet in the graph
+
+    Returns:
+        dictionary: a dictionary to be graphed
+    """
+    my_graph = {}
+    for index in range(len(res)):
+        my_graph[index] = res[index]
+    return my_graph
+
+
+def fast_target_order(ugraph):
+
+    temp_graph = comnet.copy_graph(ugraph)
+    degree_sets = [set([]) for dummy in range(len(temp_graph))]
+    for k in range(len(temp_graph)):
+        degree = len(temp_graph[k])
+        degree_sets[degree].add(k)
+    target_list = []
+    for k in range(len(temp_graph)-1, 0,-1):
+        while len(degree_sets[k]) != 0:
+            u = random.choice(list(degree_sets[k]))
+            degree_sets[k] = degree_sets[k]-{u}
+            for neighbor in temp_graph[u]:
+                d = len(temp_graph[neighbor])
+                degree_sets[d] = degree_sets[d] - {neighbor}
+                degree_sets[d-1].add(neighbor)
+            target_list.append(u)
+            comnet.delete_node(temp_graph,u)
+    target_list = target_list + list(degree_sets[0])
+    return target_list
+
+
+EX_GRAPH0 = {0:set([1,4,6]),1:set([0,2,6]),2:set([1,3,6]),3:set({2,6}),4:set([0,5]),5:set([4]),6:set([0,1,2,3]),7:set([])}
+
+#print(fast_target_order(EX_GRAPH0))
+
+#print comnet.targeted_order(EX_GRAPH0)
