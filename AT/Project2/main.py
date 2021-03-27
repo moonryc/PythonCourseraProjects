@@ -169,27 +169,29 @@ def res_to_graph(res):
 def fast_target_order(ugraph):
 
     temp_graph = comnet.copy_graph(ugraph)
-    degree_sets = [set([]) for dummy in range(len(temp_graph))]
+    degree_sets = [set() for dummy in range(len(temp_graph))]
     for k in range(len(temp_graph)):
-        degree = len(temp_graph[k])
+        degree = len(temp_graph.get(k))
         degree_sets[degree].add(k)
     target_list = []
     for k in range(len(temp_graph)-1, 0,-1):
         while len(degree_sets[k]) != 0:
-            u = random.choice(list(degree_sets[k]))
-            degree_sets[k] = degree_sets[k]-{u}
+            u = degree_sets[k].pop()
             for neighbor in temp_graph[u]:
                 d = len(temp_graph[neighbor])
-                degree_sets[d] = degree_sets[d] - {neighbor}
+                degree_sets[d].discard(neighbor)
                 degree_sets[d-1].add(neighbor)
             target_list.append(u)
             comnet.delete_node(temp_graph,u)
-    target_list = target_list + list(degree_sets[0])
+    target_list+=degree_sets[0]
     return target_list
 
 
-EX_GRAPH0 = {0:set([1,4,6]),1:set([0,2,6]),2:set([1,3,6]),3:set({2,6}),4:set([0,5]),5:set([4]),6:set([0,1,2,3]),7:set([])}
+EX_GRAPH0 = {0:set([1,4,6]),1:set([0,2,6]),2:set([1,3,6]),3:set([2,6]),4:set([0,5]),5:set([4]),6:set([0,1,2,3]),7:set([])}
 
 #print(fast_target_order(EX_GRAPH0))
 
 #print comnet.targeted_order(EX_GRAPH0)
+ex_00 = {0: set([1, 3, 4]),1: set([0, 2, 3]),2: set([1, 4]),3: set([0, 1]),4: set([0, 2, 5]),5: set([4])}
+print fast_target_order(ex_00)
+print fast_target_order(EX_GRAPH0)
