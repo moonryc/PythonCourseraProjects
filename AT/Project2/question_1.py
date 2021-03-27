@@ -58,3 +58,4 @@ def showgraph():
     plt.plot(resil_upa,label='UPA Algorithim resilience')
     plt.legend()
     plt.show()
+showgraph()
