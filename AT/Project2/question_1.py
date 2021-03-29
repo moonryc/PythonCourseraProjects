@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 compnet = main.get_compnet_graph()
 nodes = len(compnet)
 edges = main.get_num_edges(compnet)
+
 #compnet contains 1239 Nodes
 #compnet contains 3047 Edges
 
@@ -26,13 +27,14 @@ resil_comp = main.compute_resilience(compnet, attack_compnet)
 ################################
 #ER algorithim
 #need to comput p for for ER algorithim
-probability = .002 
+probability = .004 
 er_test = main.get_er_graph(1239, probability)
+print er_test
 
 attack_er = main.random_order(er_test)
 resil_er = main.compute_resilience(er_test,attack_er)
 #er_graph = main.res_to_graph(resil_er)
-
+#print main.get_num_edges(main.get_er_graph(1239, probability))
 ################################
 
 ################################
@@ -52,10 +54,9 @@ def showgraph():
     plt.title('Question 1')
     plt.xlabel('Number of nodes removed')
     plt.ylabel('Largest Connected Componet due to Node Removal')
-    plt.text(60,60,'m = {}, p = {}'.format(m,probability))
     plt.plot(resil_comp,label='Computer network resilience')
-    plt.plot(resil_er,label='ER Algorithim resilience')
-    plt.plot(resil_upa,label='UPA Algorithim resilience')
+    plt.plot(resil_er,label='ER Algorithim resilience, p = {}'.format(probability))
+    plt.plot(resil_upa,label='UPA Algorithim resilience, m = {}'.format(m))
     plt.legend()
     plt.show()
 showgraph()
