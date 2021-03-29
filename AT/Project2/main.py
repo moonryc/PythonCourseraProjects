@@ -170,7 +170,7 @@ def fast_target_order(ugraph):
 
     temp_graph = comnet.copy_graph(ugraph)
     degree_sets = [set() for dummy in range(len(temp_graph))]
-    for k in range(len(temp_graph)):
+    for k in temp_graph.keys():
         degree = len(temp_graph.get(k))
         degree_sets[degree].add(k)
     target_list = []
@@ -183,7 +183,7 @@ def fast_target_order(ugraph):
                 degree_sets[d-1].add(neighbor)
             target_list.append(u)
             comnet.delete_node(temp_graph,u)
-    target_list+=degree_sets[0]
+    target_list += degree_sets[0]
     return target_list
 
 
