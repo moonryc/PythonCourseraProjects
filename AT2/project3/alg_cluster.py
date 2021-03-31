@@ -1,7 +1,7 @@
 """
 Cluster class for Module 3
 """
-
+# pylint: disable=C0301
 import math
 
 

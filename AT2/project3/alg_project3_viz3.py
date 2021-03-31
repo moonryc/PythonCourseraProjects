@@ -7,20 +7,15 @@ Note that you must download the file
 http://www.codeskulptor.org/#alg_clusters_matplotlib.py
 to use the matplotlib version of this code
 """
-
+# pylint: disable=C0301
 # Flavor of Python - desktop or CodeSkulptor
 
 
 import math
-import random
+#import random
 import urllib.request
 import alg_cluster
 import alg_clusters_matplotlib3
-
-
-    
-
-
 
 ###################################################
 # Code to load data tables
@@ -45,7 +40,7 @@ def load_data_table(data_url):
     data_lines = data.decode().split('\n')
     print("Loaded", len(data_lines), "data points")
     data_tokens = [line.split(',') for line in data_lines]
-    return [[tokens[0], float(tokens[1]), float(tokens[2]), int(tokens[3]), float(tokens[4])] 
+    return [[tokens[0], float(tokens[1]), float(tokens[2]), int(tokens[3]), float(tokens[4])]
             for tokens in data_tokens]
 
 
@@ -57,15 +52,15 @@ def sequential_clustering(singleton_list, num_clusters):
     """
     Take a data table and create a list of clusters
     by partitioning the table into clusters based on its ordering
-    
+
     Note that method may return num_clusters or num_clusters + 1 final clusters
     """
-    
+
     cluster_list = []
     cluster_idx = 0
     total_clusters = len(singleton_list)
-    cluster_size = float(total_clusters)  / num_clusters
-    
+    cluster_size = float(total_clusters) / num_clusters
+
     for cluster_idx in range(len(singleton_list)):
         new_cluster = singleton_list[cluster_idx]
         if math.floor(cluster_idx / cluster_size) != \
@@ -73,40 +68,40 @@ def sequential_clustering(singleton_list, num_clusters):
             cluster_list.append(new_cluster)
         else:
             cluster_list[-1] = cluster_list[-1].merge_clusters(new_cluster)
-            
+
     return cluster_list
-                
+
 
 #####################################################################
-# Code to load cancer data, compute a clustering and 
+# Code to load cancer data, compute a clustering and
 # visualize the results
 
 
 def run_example():
     """
-    Load a data table, compute a list of clusters and 
+    Load a data table, compute a list of clusters and
     plot a list of clusters
     """
     data_table = load_data_table(DATA_3108_URL)
-    
+
     singleton_list = []
     for line in data_table:
-        singleton_list.append(alg_cluster.Cluster(set([line[0]]), line[1], line[2], line[3], line[4]))
-        
-    cluster_list = sequential_clustering(singleton_list, 15)	
+        singleton_list.append(alg_cluster.Cluster(
+            set([line[0]]), line[1], line[2], line[3], line[4]))
+
+    cluster_list = sequential_clustering(singleton_list, 15)
     print("Displaying", len(cluster_list), "sequential clusters")
 
     #cluster_list = alg_project3_solution.hierarchical_clustering(singleton_list, 15)
-    #print "Displaying", len(cluster_list), "hierarchical clusters"
+    # print "Displaying", len(cluster_list), "hierarchical clusters"
 
-    #cluster_list = alg_project3_solution.kmeans_clustering(singleton_list, 15, 5)	
-    #print "Displaying", len(cluster_list), "k-means clusters"
+    #cluster_list = alg_project3_solution.kmeans_clustering(singleton_list, 15, 5)
+    # print "Displaying", len(cluster_list), "k-means clusters"
 
-            
     # draw the clusters using matplotlib or simplegui
 
     alg_clusters_matplotlib3.plot_clusters(data_table, cluster_list, False)
-    #alg_clusters_matplotlib3.plot_clusters(data_table, cluster_list, True)  #add cluster centers
-     
-run_example()
+    # alg_clusters_matplotlib3.plot_clusters(data_table, cluster_list, True)  #add cluster centers
 
+
+run_example()
