@@ -104,4 +104,4 @@ def run_example():
     # alg_clusters_matplotlib3.plot_clusters(data_table, cluster_list, True)  #add cluster centers
 
 
-run_example()
+#run_example()
