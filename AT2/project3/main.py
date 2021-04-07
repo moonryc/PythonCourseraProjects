@@ -7,7 +7,7 @@ kmeans_clustering(cluster_list, num_clusters, num_iterations)
 
 where cluster_list is a 2D list of clusters in the plane
 """
-
+import random
 import math
 import alg_cluster
 
@@ -122,7 +122,6 @@ def closest_pair_strip(cluster_list, horiz_center, half_width):
 
     return (distance, coordinates[0], coordinates[1])
 
-
 ######################################################################
 # Code for hierarchical clustering
 
@@ -149,14 +148,6 @@ def hierarchical_clustering(cluster_list, num_clusters):
         cluster_list.remove(cluster_list[cluster_j])
         cluster_list.sort(key=lambda cluster: cluster.horiz_center())
     return cluster_list
-
-
-# #print(hierarchical_clustering(
-#     [alg_cluster.Cluster(set(['']), 0, 0, 1, 1),
-#      alg_cluster.Cluster(set(['']), 2, 3, 1, 1),
-#      alg_cluster.Cluster(set(['']), 2, 0, 1, 1)], 2))
-######################################################################
-# Code for k-means clustering
 
 
 def kmeans_clustering(cluster_list, num_clusters, num_iterations):
@@ -213,6 +204,19 @@ def kmeans_clustering(cluster_list, num_clusters, num_iterations):
     return new_cluster_list
 
 
-print(kmeans_clustering([alg_cluster.Cluster(set(['5']), 10, 5, 1, 1),
-                         alg_cluster.Cluster(set(['3']), 2, 3, 120, 1),
-                         alg_cluster.Cluster(set(['1']), 2, 0, 100, 1)], 2, 3))
+def gen_random_cluster(num_clusters):
+    """
+    generates clusters
+    Args:
+        num_clusters (int): desired number of clusters
+    Returns:
+        list: a list of clusters
+    """
+    temp_list = []
+    for dummy_i in range(num_clusters):
+        temp_list.append(alg_cluster.Cluster(
+            set([]),
+            random.randint(-1, 1) * random.random(),
+            random.randint(-1, 1) * random.random(),
+            0, 0))
+    return temp_list
