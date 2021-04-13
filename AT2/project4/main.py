@@ -87,7 +87,7 @@ def compute_global_alignment(seq_x, seq_y, scoring_matrix, alignment_matrix):
         alignment_matrix (2d list): an alignment matrix
 
     Returns:
-        strings: the score and 2 pairwise strings that have the highest score
+        int, string, string: the score and 2 pairwise strings that have the highest score
     """
     score = 0
     i_value = len(seq_x)
@@ -124,8 +124,16 @@ def compute_global_alignment(seq_x, seq_y, scoring_matrix, alignment_matrix):
 
 
 def compute_local_alignment(seq_x, seq_y, scoring_matrix, alignment_matrix):
-    """
-    THIS IS A TEMPORARY DOCSTRING
+    """computes the local alignment
+
+    Args:
+        seq_x (string): a string of letters
+        seq_y (string): a string of letters
+        scoring_matrix (dictionary): a dictionary used to score the combinations
+        alignment_matrix (2d list): an alignment matrix
+
+    Returns:
+        int,string, string: an int representation of the score of the 2 string followed by the 2 strings
     """
     score = 0
     i_value = len(seq_x)
