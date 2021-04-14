@@ -1,10 +1,9 @@
 """
 Provide code and solution for Application 4
 """
-import math
-import random
+
 import urllib.request
-import matplotlib.pyplot as plt
+
 
 
 
