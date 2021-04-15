@@ -71,6 +71,6 @@ def read_words(filename):
     words = word_file.read()
 
     # template lines and solution lines list of line string
-    word_list = words.split('\n')
+    word_list = words.decode().split('\n')
     print("Loaded a dictionary with", len(word_list), "words")
     return word_list
