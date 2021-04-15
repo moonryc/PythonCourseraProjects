@@ -61,12 +61,12 @@ def compute_alignment_matrix(seq_x, seq_y, scoring_matrix, global_flag):
         seq_y_length+1)] for dummy_two in range(seq_x_length+1)]
     for i_value in range(1, seq_x_length+1):
         temp_alignment_matrix[i_value][0] = scoring_matrix[seq_x[i_value-1]
-            ]['-'] + temp_alignment_matrix[i_value-1][0]
+                                                           ]['-'] + temp_alignment_matrix[i_value-1][0]
         if temp_alignment_matrix[i_value][0] < 0 and global_flag is False:
             temp_alignment_matrix[i_value][0] = 0
     for j_value in range(1, seq_y_length+1):
         temp_alignment_matrix[0][j_value] = scoring_matrix['-'][seq_y[j_value-1]
-            ] + temp_alignment_matrix[0][j_value-1]
+                                                                ] + temp_alignment_matrix[0][j_value-1]
         if temp_alignment_matrix[0][j_value] < 0 and global_flag is False:
             temp_alignment_matrix[0][j_value] = 0
     for i_value in range(1, seq_x_length+1):
@@ -177,6 +177,53 @@ def compute_local_alignment(seq_x, seq_y, scoring_matrix, alignment_matrix):
     return score, x_prime, y_prime
 
 
+def fast_compute_alignment_matrix(seq_x, seq_y, scoring_matrix, global_flag):
+    """Computes the alignment matrix/ dynamic programming table. If the global
+    flag is set to True it compute a global alignment matrix if set to False it
+    computes a local alignment matrix if set to
+
+    Args:
+        seq_x (string): a string of letters
+        seq_y (string): a string of letters
+        scoring_matrix (dictionary): a dictionary representation of the sccore
+        for letter combinations
+        global_flag (booleans): True for global and False for local
+
+    Returns:
+        2d list: a 2d list to represent the alignment matrix which will be used to
+        compute the the optimal pairwise strings
+    """
+    seq_x_length = len(seq_x)
+    seq_y_length = len(seq_y)
+    temp_alignment_matrix = [[0]]
+    for i_value in range(1, seq_x_length+1):
+        temp_holder = scoring_matrix[seq_x[i_value-1]]['-'] + temp_alignment_matrix[i_value-1][0]
+        if temp_holder < 0 and global_flag is False:
+            temp_alignment_matrix.append([0])
+        else:
+            temp_alignment_matrix.append([temp_holder])
+    for j_value in range(1, seq_y_length+1):
+        temp_holder = scoring_matrix['-'][seq_y[j_value-1]] + temp_alignment_matrix[0][j_value-1]
+        if temp_holder < 0 and global_flag is False:
+            temp_alignment_matrix[0].append(0)
+        else:
+            temp_alignment_matrix[0].append(temp_holder)
+    for i_value in range(1, seq_x_length+1):
+        for j_value in range(1, seq_y_length+1):
+            m_x_y = scoring_matrix[seq_x[i_value-1]][seq_y[j_value-1]]
+            m_x_dash = scoring_matrix[seq_x[i_value-1]]['-']
+            m_dash_y = scoring_matrix['-'][seq_y[j_value-1]]
+            temp_holder = max(
+                temp_alignment_matrix[i_value - 1][j_value - 1] + m_x_y,
+                temp_alignment_matrix[i_value - 1][j_value] + m_x_dash,
+                temp_alignment_matrix[i_value][j_value - 1] + m_dash_y)
+            if temp_holder < 0 and global_flag is False:
+                temp_alignment_matrix[i_value].append(0)
+            else:
+                temp_alignment_matrix[i_value].append(temp_holder)
+    return temp_alignment_matrix
+
+
 def generate_null_distribution(seq_x, seq_y, scoring_matrix, num_trials):
     """Write a function generate_null_distribution(seq_x, seq_y, scoring_matrix, num_trials)
     that takes as input two sequences seq_x and seq_y, a scoring matrix scoring_matrix,
@@ -202,58 +249,40 @@ def generate_null_distribution(seq_x, seq_y, scoring_matrix, num_trials):
         print('computing trial: {}'.format(i_value))
         rand_y = ''.join(random.sample(seq_y, len(seq_y)))
         temp_alignment = fast_compute_alignment_matrix(seq_x, rand_y, scoring_matrix, False)
-        max_score = temp_alignment[len(temp_alignment)-1][len(temp_alignment[0])-1]
-        scoring_distribution[i_value + 1] = max_score
+        max_score = compute_local_alignment(seq_x, rand_y, scoring_matrix, temp_alignment)
+        if scoring_distribution.get(max_score[0]) == None:
+            scoring_distribution[max_score[0]] = 1
+        else:
+            scoring_distribution[max_score[0]] += 1
     return scoring_distribution
 
 
-# print(generate_null_distribution('ac','tag',build_scoring_matrix(set(['a','c','t','g']),5,2,-4),15))
-
-def fast_compute_alignment_matrix(seq_x, seq_y, scoring_matrix, global_flag):
-    """Computes the alignment matrix/ dynamic programming table. If the global
-    flag is set to True it compute a global alignment matrix if set to False it
-    computes a local alignment matrix if set to
+def check_spelling(checked_word, dist, word_list):
+    """
+    returns words from words_list that have an
+    edit distance of dist when compared to the checked_word
 
     Args:
-        seq_x (string): a string of letters
-        seq_y (string): a string of letters
-        scoring_matrix (dictionary): a dictionary representation of the sccore
-        for letter combinations
-        global_flag (booleans): True for global and False for local
+        checked_word (string): a word
+        dist (int): an integer
+        word_list (list): a list of words
 
     Returns:
-        2d list: a 2d list to represent the alignment matrix which will be used to
-        compute the the optimal pairwise strings
+        set: a set of words
     """
-    seq_x_length = len(seq_x)
-    seq_y_length = len(seq_y)
-    temp_alignment_matrix = [[0]]
-    for i_value in range(1, seq_x_length+1):
-        temp_holder = scoring_matrix[seq_x[i_value-1]]['-'] +temp_alignment_matrix[i_value-1][0]
-        if temp_holder < 0 and global_flag is False:
-            temp_alignment_matrix.append([0])
-        else:
-            temp_alignment_matrix.append([temp_holder])
-    for j_value in range(1, seq_y_length+1):
-        temp_holder=scoring_matrix['-'][seq_y[j_value-1]] + temp_alignment_matrix[0][j_value-1]
-        if temp_holder < 0 and global_flag is False:
-            temp_alignment_matrix[0].append(0)
-        else:
-            temp_alignment_matrix[0].append(temp_holder)
-    for i_value in range(1, seq_x_length+1):
-        for j_value in range(1, seq_y_length+1):
-            m_x_y=scoring_matrix[seq_x[i_value-1]][seq_y[j_value-1]]
-            m_x_dash=scoring_matrix[seq_x[i_value-1]]['-']
-            m_dash_y=scoring_matrix['-'][seq_y[j_value-1]]
-            temp_holder=max(
-                temp_alignment_matrix[i_value - 1][j_value - 1] + m_x_y,
-                temp_alignment_matrix[i_value - 1][j_value] + m_x_dash,
-                temp_alignment_matrix[i_value][j_value - 1] + m_dash_y)
-            if temp_holder < 0 and global_flag is False:
-                temp_alignment_matrix[i_value].append(0)
-            else:
-                temp_alignment_matrix[i_value].append(temp_holder)
-    return temp_alignment_matrix
+    alphabet = set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+                    'y', 'z'])
+    scoring_matrix = build_scoring_matrix(alphabet, 2, 1, 0)
+    my_set = set([])
+    for word in word_list:
+        alignment_matrix = compute_alignment_matrix(checked_word, word, scoring_matrix, True)
+        alignment = compute_global_alignment(checked_word, word, scoring_matrix, alignment_matrix)
+        x_len = len(checked_word)
+        y_len = len(word)
 
-print(fast_compute_alignment_matrix('ac', 'tag', build_scoring_matrix(
-    set(['a', 'c', 'g', 't']), 5, 2, -4), True))
+        outcome = x_len + y_len - alignment[0]
+
+        if outcome <= dist:
+            my_set.add(word)
+    return my_set
